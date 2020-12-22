@@ -2920,7 +2920,38 @@ void matrix_rotate(vector<vector<int>>& matrix) {
 //	[15, 7]
 //]
 vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
-
+	bool flag = true;
+	vector<vector<int>> ans;
+	stack<TreeNode*> stk1;
+	stack<TreeNode*> stk2;
+	if (root) {
+		stk1.push(root);
+		while (!stk1.empty() || !stk2.empty()) {
+			vector<int> tmp;
+			if (flag) {
+				while (!stk1.empty()) {
+					TreeNode* node = stk1.top();
+					stk1.pop();
+					tmp.push_back(node->val);
+					if (node->left) stk2.push(node->left);
+					if (node->right) stk2.push(node->right);
+				}
+				flag = false;
+			}
+			else {
+				while (!stk2.empty()) {
+					TreeNode* node = stk2.top();
+					stk2.pop();
+					tmp.push_back(node->val);
+					if (node->right) stk1.push(node->right);
+					if (node->left) stk1.push(node->left);
+				}
+				flag = true;
+			}
+			ans.push_back(std::move(tmp));
+		}
+	}
+	return std::move(ans);
 }
 
 
